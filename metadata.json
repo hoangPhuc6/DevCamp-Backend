@@ -1,0 +1,5 @@
+
+{
+  "name": "Gemini Chatbot with Function Calling",
+  "description": "An intelligent chatbot application built with Angular and the Google Gemini API. It supports session-based conversations and can use external tools via function calling."
+}
