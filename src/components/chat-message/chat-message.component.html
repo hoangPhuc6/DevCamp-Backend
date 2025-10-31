@@ -15,13 +15,16 @@
       [class.bg-slate-200]="isModel() || isTool()"
       [class.rounded-bl-lg]="isModel() || isTool()"
     >
+      @if (message().searchEntryPoint) {
+        <div class="search-entry-point" [innerHTML]="message().searchEntryPoint"></div>
+      }
       @if (isTool()) {
         <div class="flex items-center gap-1.5 mb-1">
           <div class="w-2 h-2 rounded-full bg-slate-400"></div>
           <p class="text-xs text-slate-500 font-medium">Tool Call</p>
         </div>
       }
-      <p class="text-sm whitespace-pre-wrap">{{ message().content }}</p>
+      <p class="text-sm whitespace-pre-wrap" [innerHTML]="processedContent()"></p>
     </div>
 
     @if (isUser()) {

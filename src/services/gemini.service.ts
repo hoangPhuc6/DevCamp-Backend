@@ -6,7 +6,7 @@ import {
   Part,
 } from '@google/genai';
 import { functionDeclarations, toolImplementations } from './available-tools';
-import { MessageRole } from '../models/chat.model';
+import { ChatMessage } from '../models/chat.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +16,9 @@ export class GeminiService {
   private readonly ai: GoogleGenAI;
 
   constructor() {
+    // IMPORTANT: Replace with your API key
     this.ai = new GoogleGenAI({
-      apiKey: 'AIzaSyC-aBTOrJcVrW0OEsUPccR2RZgsCIZK5HU',
+      apiKey: 'YOUR_API_KEY_HERE', // 👈 Replace this!
     });
   }
 
@@ -25,14 +26,12 @@ export class GeminiService {
     this.chat = this.ai.chats.create({
       model: 'gemini-2.5-flash',
       config: {
-        tools: [{ functionDeclarations }],
+        tools: [{ urlContext: {} }, { googleSearch: {} }],
       },
     });
   }
 
-  async sendMessage(
-    prompt: string
-  ): Promise<{ role: MessageRole; content: string }> {
+  async sendMessage(prompt: string): Promise<ChatMessage> {
     if (!this.chat) {
       this.startChat();
     }
@@ -53,18 +52,23 @@ export class GeminiService {
   private async handleResponse(
     response: GenerateContentResponse,
     isToolResponse = false
-  ): Promise<{
-    role: MessageRole;
-    content: string;
-  }> {
+  ): Promise<ChatMessage> {
     const functionCalls = response.candidates?.[0]?.content.parts
       .filter((part) => !!part.functionCall)
       .map((part) => part.functionCall);
 
     if (!functionCalls || functionCalls.length === 0) {
+      const groundingMetadata = response.candidates?.[0]?.groundingMetadata;
+
       return {
         role: isToolResponse ? 'tool' : 'model',
         content: response.text.trim(),
+        searchEntryPoint: groundingMetadata?.searchEntryPoint?.renderedContent,
+        groundingChunks: groundingMetadata?.groundingChunks?.map((chunk) => ({
+          uri: chunk.web.uri,
+          title: chunk.web.title,
+        })),
+        groundingSupports: groundingMetadata?.groundingSupports,
       };
     }
 

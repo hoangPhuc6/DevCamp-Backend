@@ -35,7 +35,7 @@ export class AppComponent implements AfterViewInit {
       {
         role: 'model',
         content:
-          "Hello! I'm a Gemini-powered chatbot. You can ask me about the weather or an order status. Try 'What's the weather in Tokyo?' or 'Status for order 501?'",
+          "Hello! I'm a Gemini-powered chatbot. How can I assist you today?",
       },
     ]);
   }
