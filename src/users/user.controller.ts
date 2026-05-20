@@ -17,12 +17,6 @@ export class UpdateProfile extends RegisterDto {}
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // Simple test GET endpoint
-  @Get('test')
-  testApiGet() {
-    return { message: 'Test GET API is working successfully!' };
-  }
-
   // Get all profiles
   @Get()
   @HttpCode(200)
