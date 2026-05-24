@@ -22,12 +22,15 @@ export class UserService {
   // Update profile (Update name)
   async updateProfile(updateProfileDto: UpdateProfile): Promise<UserDocument> {
     const { email, displayName } = updateProfileDto; // Destructure the email and displayName from the updateProfileDto
-    const user = await this.userModel.findOne({ email });
+    const user = await this.userModel.findOneAndUpdate(
+      { email },
+      { $set: { displayName } },
+      { new: true },
+    );
     if (!user) {
-      throw new UnauthorizedException('User with this name not found');
+      throw new UnauthorizedException('User with this email not found');
     }
-    user.displayName = displayName;
-    return await user.save();
+    return user;
   }
 
   //Delete user
