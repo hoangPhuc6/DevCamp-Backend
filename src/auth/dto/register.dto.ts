@@ -11,5 +11,5 @@ export class RegisterDto {
     },
   )
   passHash!: string;
-  displayName!: string;
+  displayName?: string;
 }
