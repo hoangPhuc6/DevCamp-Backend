@@ -125,7 +125,6 @@ export class AuthService {
       orConditions.push({ email }); // If email exists, add condition to find user by email as well (fallback)
     }
 
-    // Tìm user bằng githubId trước, nếu không có mới fall-back tìm bằng email
     const user = await this.userModel.findOne({
       $or: orConditions, // Find user by githubId first, if not found then fall-back to find by email
     });
