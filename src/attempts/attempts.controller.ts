@@ -34,7 +34,7 @@ export class AttemptsController {
     @Param('id') challengeId: string,
     @Req() req: RequestWithUser, // req.user will be populated by JwtAuthGuard with the authenticated user's information
   ) {
-    return await this.attemptsService.createAttempt(
+    return this.attemptsService.createAttempt(
       createAttemptDto,
       challengeId,
       req.user._id,
@@ -51,23 +51,24 @@ export class AttemptsController {
     @Req() req: RequestWithUser,
   ) {
     // will return all attempts
-    return await this.attemptsService.getAttemptsForExercise(
+    return this.attemptsService.getAttemptsForExercise(
       challengeId,
       req.user._id,
     );
   }
 
   // Endpoint to update an attempt's code and status
-  @Patch('attempts/:attemptId')
+  @Patch(':id/attempts/:attemptId')
   @HttpCode(200)
   @UseGuards(JwtAuthGuard) // Ensure the user is authenticated to update their attempt
   async updateAttempt(
     @Param('attemptId') attemptId: string,
+    @Param('id') challengeId: string,
     @Body() updateAttemptDto: UpdateAttemptDto,
     @Req() req: RequestWithUser,
   ) {
     // will update the attempt's code and status
-    return await this.attemptsService.updateAttempt(
+    return this.attemptsService.updateAttempt(
       attemptId,
       updateAttemptDto,
       req.user._id,
@@ -83,7 +84,7 @@ export class AttemptsController {
     @Param('id') challengeId: string,
     @Req() req: RequestWithUser,
   ) {
-    return await this.attemptsService.createQuizAttempt(
+    return this.attemptsService.createQuizAttempt(
       createAttemptQuizzDto,
       challengeId,
       req.user._id,
