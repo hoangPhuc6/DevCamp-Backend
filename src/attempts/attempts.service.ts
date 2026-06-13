@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateAttemptDto } from './dto/create-attempt.dto';
 import { UpdateAttemptDto } from './dto/update-attempt.dto';
@@ -23,7 +27,7 @@ export class AttemptsService {
     challengeId: string,
     userId: string,
   ) {
-    // Tạo một attempt hoàn toàn mới mỗi khi hàm này được gọi (mỗi lần Run là 1 Attempt)
+    // Create a new attempt document
     const newAttempt = new this.attemptModel({
       user: userId,
       challenge: challengeId,
@@ -31,11 +35,11 @@ export class AttemptsService {
       startedAt: new Date(),
     });
 
-    return await newAttempt.save();
+    return newAttempt.save();
   }
 
   async getAttemptsForExercise(challengeId: string, userId: string) {
-    return await this.attemptModel
+    return this.attemptModel
       .find({ challenge: challengeId, user: userId })
       .sort({ startedAt: -1 }); // Sort attempts by most recent first
   }
@@ -54,16 +58,34 @@ export class AttemptsService {
       _id: attemptId,
       user: userId,
     });
+
     if (!attempt) {
       throw new NotFoundException('Attempt not found');
     }
-    // update the attempt's currentCode and status if they are provided in the dto
+
+    // Check the status from the database
+    if (attempt.status !== 'in progress') {
+      throw new BadRequestException(
+        'Cannot update code for an attempt that is not in progress',
+      );
+    }
+
     // If code is not undefinfed, update currentCode
     if (dto.code !== undefined) {
       attempt.currentCode = dto.code;
       attempt.runCount += 1; // Increment run count each time code is updated
     }
-    return await attempt.save();
+
+    // If status is not undefined, assignment value to attempt.status(field)
+    if (dto.status !== undefined) {
+      attempt.status = dto.status;
+      // If the status is updated to 'completed' or 'failed', set the completedAt
+      if (dto.status === 'completed' || dto.status === 'failed') {
+        attempt.completedAt = new Date(); // Set time of completion when status changes to completed or failed
+      }
+    }
+
+    return attempt.save();
   }
 
   // QUIZ FLOW FOR ATTEMPTS
