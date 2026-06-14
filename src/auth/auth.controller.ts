@@ -6,6 +6,7 @@ import {
   HttpCode,
   Request,
   UseGuards,
+  Redirect,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
@@ -49,14 +50,15 @@ export class AuthController {
   }
 
   @Get('google/redirect')
-  @HttpCode(200)
   @UseGuards(GoogleAuthGuard) // This guard will use the GoogleStrategy to handle the callback from Google
+  @Redirect() // Redirect to frontend after successful authentication
   async googleRedirect(@Request() req: { user: UserDocument }) {
     // req.user is automatically populated by GoogleStrategy after successful authentication
+    const authToken = await this.authService.login(req.user);
+    const token = authToken.accessToken; // Extract the JWT token from the authentication result
     return {
-      message: 'Google authentication successful',
-      user: req.user,
-      ...(await this.authService.login(req.user)), // Inheritance function login in auth.service.ts to generate JWT token for the user
+      statusCode: 302,
+      url: process.env.FRONTEND_URL!, // Redirect to frontend URL
     };
   }
 
@@ -69,13 +71,14 @@ export class AuthController {
   }
 
   @Get('github/redirect')
-  @HttpCode(200)
   @UseGuards(GithubAuthGuard)
+  @Redirect() // Redirect to frontend after successful authentication
   async githubRedirect(@Request() req: { user: UserDocument }) {
+    const authToken = await this.authService.login(req.user);
+    const token = authToken.accessToken; // Extract the JWT token from the authentication result
     return {
-      message: 'GitHub authentication successful',
-      user: req.user,
-      ...(await this.authService.login(req.user)), // Inheritance function login in auth.service.ts to generate JWT token for the user
+      statusCode: 302,
+      url: process.env.FRONTEND_URL!, // Redirect to frontend URL
     };
   }
 }
