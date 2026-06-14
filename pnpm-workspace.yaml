@@ -1,4 +1,7 @@
 allowBuilds:
   '@nestjs/core': true
   bcrypt: true
+  msgpackr-extract: set this to true or false
   unrs-resolver: true
+minimumReleaseAgeExclude:
+  - bullmq@5.78.1
