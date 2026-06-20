@@ -6,14 +6,18 @@ import {
   HttpCode,
   Body,
   Param,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegisterDto } from '../auth/dto/register.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 //Update profile
 export class UpdateProfile extends RegisterDto {}
 
 @Controller('users')
+// Protect all route by JwtAuthGuard
+@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
