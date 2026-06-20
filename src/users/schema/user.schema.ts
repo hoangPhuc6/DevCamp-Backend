@@ -44,6 +44,8 @@ export class User extends Document {
     token: string;
     expiresAt: Date;
   };
+  @Prop({ type: String, enum: ['admin', 'user'], default: 'user' })
+  role!: 'admin' | 'user';
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
