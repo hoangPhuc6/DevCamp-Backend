@@ -14,14 +14,18 @@ import { LocalAuthGuard } from './guards/local.guard';
 import { GoogleAuthGuard } from './guards/google.guard';
 import { GithubAuthGuard } from './guards/github.guard';
 import { UserDocument } from '../users/schema/user.schema';
+import { ApiTags, ApiOperation, ApiBody } from '@nestjs/swagger';
 
 // Register controller with traditional email/password login
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
   @HttpCode(200)
+  @ApiOperation({ summary: 'Register new user' })
+  @ApiBody({ type: RegisterDto })
   async register(@Body() registerDto: RegisterDto) {
     return await this.authService.register(registerDto);
   }
@@ -29,6 +33,15 @@ export class AuthController {
   // Login
   @Post('login')
   @HttpCode(200)
+  @ApiOperation({ summary: 'Login with email and password' })
+  @ApiBody({
+    schema: {
+      example: {
+        email: 'tikitaka@gmail.com',
+        password: 'tikitaka',
+      },
+    },
+  })
   @UseGuards(LocalAuthGuard) // This guard will use the LocalStrategy to authenticate the user
   async login(@Request() req: { user: UserDocument }) {
     // req.user is automatically populated by LocalAuthGuard (LocalStrategy)
@@ -41,6 +54,7 @@ export class AuthController {
 
   // Login with Google (handled by GoogleStrategy)
   @Get('google/login')
+  @ApiOperation({ summary: 'Redirect to Google OAuth login' })
   @UseGuards(GoogleAuthGuard) // This guard will use the GoogleStrategy to authenticate the user
   googleLogin() {
     // This route will redirect the user to Google for authentication
@@ -50,6 +64,7 @@ export class AuthController {
   }
 
   @Get('google/redirect')
+  @ApiOperation({ summary: 'Google OAuth callback' })
   @UseGuards(GoogleAuthGuard) // This guard will use the GoogleStrategy to handle the callback from Google
   @Redirect() // Redirect to frontend after successful authentication
   async googleRedirect(@Request() req: { user: UserDocument }) {
@@ -63,6 +78,7 @@ export class AuthController {
   }
 
   @Get('github/login')
+  @ApiOperation({ summary: 'Redirect to GitHub OAuth login' })
   @UseGuards(GithubAuthGuard)
   githubLogin() {
     return {
@@ -71,6 +87,7 @@ export class AuthController {
   }
 
   @Get('github/redirect')
+  @ApiOperation({ summary: 'GitHub OAuth callback' })
   @UseGuards(GithubAuthGuard)
   @Redirect() // Redirect to frontend after successful authentication
   async githubRedirect(@Request() req: { user: UserDocument }) {
