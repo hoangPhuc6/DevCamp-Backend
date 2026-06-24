@@ -1,0 +1,54 @@
+
+<main class="h-screen w-screen flex flex-col items-center justify-center bg-slate-100 p-4">
+  <div class="w-full max-w-2xl h-full flex flex-col bg-white rounded-2xl shadow-2xl shadow-slate-300/60 overflow-hidden">
+    
+    <!-- Header -->
+    <header class="p-4 border-b border-slate-200 bg-slate-50">
+      <h1 class="text-xl font-bold text-slate-800">Gemini Chatbot</h1>
+      <p class="text-sm text-slate-500">Powered by Angular & Function Calling</p>
+    </header>
+
+    <!-- Chat Messages -->
+    <div #chatContainer class="flex-1 overflow-y-auto p-4 space-y-2 custom-scrollbar">
+      @for (message of messages(); track message; let i = $index) {
+        <app-chat-message [message]="message" />
+      }
+      @if (isLoading()) {
+        <div class="w-full px-4 py-2 flex justify-start">
+            <div class="max-w-xl flex items-start gap-3">
+                <div class="flex-shrink-0 w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold text-sm">G</div>
+                <div class="rounded-2xl rounded-bl-lg px-4 py-2.5 bg-slate-200 text-slate-800 flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-slate-500 rounded-full animate-pulse [animation-delay:-0.3s]"></div>
+                    <div class="w-2 h-2 bg-slate-500 rounded-full animate-pulse [animation-delay:-0.15s]"></div>
+                    <div class="w-2 h-2 bg-slate-500 rounded-full animate-pulse"></div>
+                </div>
+            </div>
+        </div>
+      }
+    </div>
+
+    <!-- Input Form -->
+    <footer class="p-4 border-t border-slate-200 bg-slate-50">
+      <form (ngSubmit)="sendMessage()" class="flex items-center gap-3">
+        <input 
+          type="text"
+          [(ngModel)]="userInput"
+          name="userInput"
+          placeholder="Type your message..."
+          class="flex-1 p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-400 focus:outline-none transition duration-200"
+          [disabled]="isLoading()"
+        />
+        <button 
+          type="submit"
+          class="px-5 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 focus:outline-none transition duration-200 disabled:bg-slate-400 disabled:cursor-not-allowed"
+          [disabled]="isLoading() || userInput().trim() === ''"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+            <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+          </svg>
+        </button>
+      </form>
+    </footer>
+
+  </div>
+</main>
