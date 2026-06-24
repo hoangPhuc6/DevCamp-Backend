@@ -1,28 +1,27 @@
 {
-  "name": "gemini-chatbot-with-function-calling",
+  "name": "ai-thinking-mirror",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "ng serve",
-    "build": "ng build",
-    "preview": "ng serve --configuration=production"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "rxjs": "^7.8.2",
-    "@angular/common": "^20.3.0",
-    "@angular/forms": "^20.3.7",
-    "@angular/compiler": "^20.3.0",
-    "@angular/platform-browser": "^20.3.0",
-    "@angular/core": "^20.3.0",
     "@google/genai": "^1.27.0",
-    "@angular/build": "^20.3.0",
-    "@angular/cli": "^20.3.0",
-    "@angular/compiler-cli": "^20.3.0",
-    "tailwindcss": "latest"
+    "dotenv": "^17.4.2",
+    "mongoose": "^9.7.0",
+    "node-cron": "^4.2.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
+    "@types/node-cron": "^3.0.11",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.4.1",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }
