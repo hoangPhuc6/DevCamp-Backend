@@ -1,20 +1,33 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "skipLibCheck": true,
-    "types": ["node"],
-    "moduleResolution": "bundler",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "resolvePackageJsonExports": true,
+    "esModuleInterop": true,
     "isolatedModules": true,
-    "moduleDetection": "force",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "allowJs": true,
     "jsx": "react-jsx",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
     "strict": true,
-    "noEmit": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false,
     "paths": {
       "@/*": ["./*"]
     }
   },
-  "include": ["mirror", "testReport", "index.tsx", "vite-env.d.ts"]
+  "include": ["src", "mirror", "testReport", "index.tsx", "vite-env.d.ts"]
 }
