@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './users/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ChallengesModule } from './challenges/challenges.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ChallengesModule } from './challenges/challenges.module';
     UserModule,
     AuthModule,
     ChallengesModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
