@@ -21,10 +21,8 @@ class ExampleItem {
 @Schema({ timestamps: true })
 export class Challenges extends Document {
   declare _id: Types.ObjectId;
-  // @Prop({ type: Types.ObjectId, ref: 'Category', required: true })
-  // categoryId!: Types.ObjectId;
-  @Prop({ type: String, required: false })
-  categoryId!: string;
+  @Prop({ type: Types.ObjectId, ref: 'categories', required: true })
+  categoryId!: Types.ObjectId;
   @Prop({ required: true, enum: ['coding', 'multiple_choice'] })
   challengeType!: 'coding' | 'multiple_choice';
   @Prop()
